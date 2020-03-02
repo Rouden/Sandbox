@@ -1,0 +1,20 @@
+name: CI
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.101
+    - run: dotnet build --configuration Release
+    - uses: actions/upload-artifact@v1.0.0
+      with:
+        name: binary
+        # Directory containing files to upload
+        path: ./dotnet/bin/Release/netcoreapp3.1/publish
