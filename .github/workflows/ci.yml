@@ -17,7 +17,7 @@ jobs:
     - name: Create issue using REST API
       run: |
         curl \
-        --url https://api.github.com/repos/${{github.repository}}/actions/runs/${{github.run_id}}/artifacts \
+        --url https://api.github.com/repos/${{github.repository}}/actions/artifacts \
         --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
         --header 'content-type: application/json' | tee artefacts
     - uses: actions/upload-artifact@v1.0.0
