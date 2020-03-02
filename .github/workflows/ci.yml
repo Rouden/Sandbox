@@ -14,12 +14,16 @@ jobs:
         dotnet-version: 3.1.101
     - run: dotnet publish -c Release
       working-directory: ./dotnet
-    - name: Create issue using REST API
+    - name: Remove old artifacts
       run: |
         curl \
         --url https://api.github.com/repos/${{github.repository}}/actions/artifacts \
         --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
-        --header 'content-type: application/json' | tee artefacts
+        --header 'content-type: application/json' | jq ".artifacts | .[] | .id" | tee artefacts
+        tail -n +3 artefacts | xargs -n1 -i curl -X DELETE \
+        --url https://api.github.com/repos/${{github.repository}}/actions/artifacts/{} \
+        --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
+        --header 'content-type: application/json'
     - uses: actions/upload-artifact@v1.0.0
       with:
         name: binary
