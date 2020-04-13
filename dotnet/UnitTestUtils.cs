@@ -36,7 +36,7 @@ namespace dotnet
         {
             // git ls-files コマンドでファイルの一覧を取得する
             var root = UnitTestUtils.GetRepositoryRoot();
-            var psi = new ProcessStartInfo("cmd.exe", "/c git ls-files -z");
+            var psi = new ProcessStartInfo("git", "ls-files -z");
             psi.StandardOutputEncoding = Encoding.UTF8;
             psi.WorkingDirectory = root;
             psi.UseShellExecute = false;
@@ -45,7 +45,7 @@ namespace dotnet
             string output = await p.StandardOutput.ReadToEndAsync();
 
             // 一覧をフルパスの配列にして返す
-            var files = output.Split('\0');
+            var files = output.Trim('\0').Split('\0');
             return files.Select(v => $"{root}/{v}").ToArray();
         }
 
