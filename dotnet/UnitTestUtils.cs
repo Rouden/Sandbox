@@ -49,6 +49,13 @@ namespace dotnet
             return files.Select(v => $"{root}/{v}").ToArray();
         }
 
+        // バージョン管理されたファイルで、指定の拡張子のファイルの一覧をフルパスで返す
+        public static async Task<string[]> GetVersionedFiles(string[] exts)
+        {
+            var list = await GetVersionedFiles();
+            return list.Where(v => exts.Contains(Path.GetExtension(v))).ToArray();
+        }
+
         [Fact]
         public void GetRepositoryRootChecker()
         {
@@ -62,11 +69,22 @@ namespace dotnet
         public async void GetVersionedFilesChecker()
         {
             var paths = await GetVersionedFiles();
-            
+
             output.WriteLine(String.Join("\n", paths));
 
             Assert.True(1 <= paths.Where(text => text.EndsWith("README.md")).Count(), "README.md not found.");
             Assert.True(0 == paths.Where(text => text.EndsWith("AssemblyInfo.cs")).Count(), "AssemblyInfo.cs detected.");
+        }
+
+        [Fact]
+        public async void GetVersionedFilesChecker2()
+        {
+            var paths = await GetVersionedFiles(new string[] { ".md" });
+
+            output.WriteLine(String.Join("\n", paths));
+
+            Assert.True(1 <= paths.Where(text => text.EndsWith("README.md")).Count(), "README.md not found.");
+            Assert.True(0 == paths.Where(text => text.EndsWith(".gitignore")).Count(), "extension is not filtered.");
         }
     }
 }
