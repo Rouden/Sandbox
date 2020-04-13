@@ -10,7 +10,7 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Text;
 
-namespace dotnet
+namespace UnitTest
 {
     public class UnitTestUtils
     {
