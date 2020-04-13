@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -14,12 +15,12 @@ namespace dotnet
         }
 
         [Fact]
-        public void GetRepositoryRootChecker()
+        public async void JapaneseFilenameCheck()
         {
-            var path = UnitTestUtils.GetRepositoryRoot();
-            output.WriteLine(@$"path = {path}");
-            Assert.True(File.Exists(@$"{path}/README.md"));
-            Assert.True(File.Exists(@$"{path}/.gitignore"));
+            // 日本語名のファイルが正しく取得できていることを確認する
+            var path = await UnitTestUtils.GetVersionedFiles();
+            Assert.True(path.Where(v=>v.EndsWith("日本語のファイル.md")).Count() == 1);
+            Assert.True(path.Where(v=>v.EndsWith("日本語のファイルだみー.md")).Count() == 0);
         }
     }
 }
