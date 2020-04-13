@@ -1,12 +1,25 @@
 ﻿using System;
+using System.IO;
+using Xunit;
+using Xunit.Abstractions;
 
 namespace dotnet
 {
-    class Program
+    public class Program
     {
-        static void Main(string[] args)
+        private readonly ITestOutputHelper output;
+        public Program(ITestOutputHelper helper)
         {
-            Console.WriteLine("Hello World!");
+            output = helper;
+        }
+
+        [Fact]
+        public void GetRepositoryRootChecker()
+        {
+            var path = UnitTestUtils.GetRepositoryRoot();
+            output.WriteLine(@$"path = {path}");
+            Assert.True(File.Exists(@$"{path}/README.md"));
+            Assert.True(File.Exists(@$"{path}/.gitignore"));
         }
     }
 }
