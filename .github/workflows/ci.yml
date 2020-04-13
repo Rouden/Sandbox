@@ -28,4 +28,4 @@ jobs:
       with:
         name: binary
         # Directory containing files to upload
-        path: ./dotnet/bin/Release/netcoreapp3.1/publish
+        path: ./texts
